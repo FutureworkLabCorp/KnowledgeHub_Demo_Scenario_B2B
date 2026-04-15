@@ -6,7 +6,7 @@ import { Database, Scissors, Network, MessageSquare, ShieldCheck, Home } from "l
 
 const items = [
   { href: "/", label: "Overview", icon: Home },
-  { href: "/sources", label: "1. 데이터 소스", icon: Database },
+  { href: "/sources", label: "1. Data Sources", icon: Database },
   { href: "/chunking", label: "2. Chunking Studio", icon: Scissors },
   { href: "/graph", label: "3. Knowledge Graph", icon: Network },
   { href: "/ask", label: "4. Ask ax flow", icon: MessageSquare },

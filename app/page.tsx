@@ -2,11 +2,11 @@ import Link from "next/link";
 import { ArrowRight, Database, Scissors, Network, MessageSquare, ShieldCheck } from "lucide-react";
 
 const steps = [
-  { href: "/sources", num: "01", title: "데이터 소스", desc: "ERP·DW·공유폴더·수기문서를 한 파이프라인으로", icon: Database },
-  { href: "/chunking", num: "02", title: "Chunking Studio", desc: "청크 단위까지 열어보고 직접 수정", icon: Scissors },
-  { href: "/graph", num: "03", title: "Knowledge Graph", desc: "엔티티·관계 자동 추출, 실무자가 직접 편집", icon: Network },
-  { href: "/ask", num: "04", title: "Ask ax flow", desc: "근거 기반 답변 · 원문 점프 · ⚡Performance", icon: MessageSquare },
-  { href: "/audit", num: "05", title: "AX Guard", desc: "감사로그 · 권한 매트릭스 · 접근 차단 증적", icon: ShieldCheck },
+  { href: "/sources", num: "01", title: "Data Sources", icon: Database },
+  { href: "/chunking", num: "02", title: "Chunking Studio", icon: Scissors },
+  { href: "/graph", num: "03", title: "Knowledge Graph", icon: Network },
+  { href: "/ask", num: "04", title: "Ask ax flow", icon: MessageSquare },
+  { href: "/audit", num: "05", title: "AX Guard", icon: ShieldCheck },
 ];
 
 export default function HomePage() {
@@ -49,7 +49,6 @@ export default function HomePage() {
                   <ArrowRight size={16} className="text-ink-500 group-hover:text-ax-blue transition" />
                 </div>
                 <div className="mt-4 font-display text-xl font-semibold">{s.title}</div>
-                <div className="text-sm text-ink-600 mt-1">{s.desc}</div>
               </Link>
             );
           })}

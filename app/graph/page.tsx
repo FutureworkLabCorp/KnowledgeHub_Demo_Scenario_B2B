@@ -57,6 +57,8 @@ export default function GraphPage() {
             linkDirectionalArrowRelPos={1}
             linkLabel={(l: any) => l.label}
             backgroundColor="#FFFFFF"
+            cooldownTicks={80}
+            onEngineStop={(g: any) => g?.zoomToFit?.(400, 60)}
             onNodeClick={(n: any) => setSelected(n.id)}
             nodeCanvasObjectMode={() => "after"}
             nodeCanvasObject={(n: any, ctx, scale) => {
