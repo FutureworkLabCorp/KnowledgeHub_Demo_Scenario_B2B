@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { graph } from "@/lib/mockData";
 import StepHeader from "@/components/StepHeader";
 import Link from "next/link";
@@ -10,6 +10,30 @@ const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), { ssr: false 
 export default function GraphPage() {
   const [selected, setSelected] = useState<string | null>("양극재");
   const [schema, setSchema] = useState<"auto" | "tpl">("tpl");
+  const fgRef = useRef<any>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ w: 800, h: 560 });
+
+  useEffect(() => {
+    if (!wrapRef.current) return;
+    const el = wrapRef.current;
+    const update = () => setSize({ w: el.clientWidth, h: el.clientHeight });
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const fit = () => {
+    const fg = fgRef.current;
+    if (!fg) return;
+    fg.zoomToFit?.(500, 60);
+  };
+
+  useEffect(() => {
+    const timers = [300, 800, 1600, 2500].map((t) => setTimeout(fit, t));
+    return () => timers.forEach(clearTimeout);
+  }, [size.w, size.h]);
 
   const data = useMemo(
     () => ({
@@ -43,11 +67,12 @@ export default function GraphPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-        <div className="lg:col-span-2 bg-white border border-ink-200 rounded-xl overflow-hidden relative" style={{ height: 560 }}>
+        <div ref={wrapRef} className="lg:col-span-2 bg-white border border-ink-200 rounded-xl overflow-hidden relative" style={{ height: 560 }}>
           <div className="absolute top-3 right-3 z-10 bg-ink-100/90 border border-ink-200 rounded-lg px-3 py-2 text-[11px] font-mono text-ink-700">
             엔티티 <span className="text-ax-blue">3,214</span> · 관계 <span className="text-ax-blue">8,902</span> · 클러스터 <span className="text-ax-blue">17</span>
           </div>
           <ForceGraph2D
+            ref={fgRef}
             graphData={data}
             nodeLabel={(n: any) => `${n.label} (${n.type})`}
             nodeColor={(n: any) => (n.id === selected ? "#09090B" : n.color)}
@@ -57,8 +82,11 @@ export default function GraphPage() {
             linkDirectionalArrowRelPos={1}
             linkLabel={(l: any) => l.label}
             backgroundColor="#FFFFFF"
-            cooldownTicks={80}
-            onEngineStop={(g: any) => g?.zoomToFit?.(400, 60)}
+            width={size.w}
+            height={size.h}
+            warmupTicks={60}
+            cooldownTicks={100}
+            onEngineStop={fit}
             onNodeClick={(n: any) => setSelected(n.id)}
             nodeCanvasObjectMode={() => "after"}
             nodeCanvasObject={(n: any, ctx, scale) => {
